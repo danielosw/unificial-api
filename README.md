@@ -4,7 +4,7 @@ HTML extraction and scraping for AO3 fanfiction metadata.
 
 This crate provides functionality to extract metadata from Archive of Our Own
 (AO3) HTML pages. It depends on `ficdata` for the core data structures.
-
+Meant for personal use
 ## Installation
 
 Add this to your `Cargo.toml`:
