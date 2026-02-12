@@ -1,0 +1,27 @@
+[package]
+name = "ao3-api-rs"
+version = "0.1.0"
+edition = "2024"
+authors = ["Danielosw"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/danielosw/ao3-api-rs"
+description = " an unificial ao3 api written in rust "
+readme = "README.md"
+keywords = ["ao3", "fanfiction", "scraper", "extraction"]
+categories = ["parser-implementations", "web-programming"]
+
+[dependencies]
+ficdata = { git = "ssh://git@github.com/danielosw/ficdata.git" }
+scraper = "0.*"
+regex = "1.*"
+thiserror = "2.0.18"
+serde = { version = "1.*", features = ["derive"] }
+serde_json = "1.*"
+reqwest = { version = "0.*", features = ["cookies", "blocking"] }
+rayon = "1.11.0"
+pretty_env_logger = "0.5.*"
+log = "0.4"
+
+
+[lints.rust]
+non_snake_case = { level = "allow" }
