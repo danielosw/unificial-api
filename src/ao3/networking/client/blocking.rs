@@ -22,7 +22,7 @@ static PAGE_NUM_REGEX: LazyLock<Regex> =
 ///
 /// # Example
 /// ```no_run
-/// use ao3_api_rs::networking::create_client;
+/// use unificial_api::ao3::networking::create_client;
 /// let client = create_client("test").expect("Failed to create client");
 /// ```
 pub fn create_client(useragent: &str) -> Result<Client, reqwest::Error> {
@@ -45,7 +45,7 @@ pub fn create_client(useragent: &str) -> Result<Client, reqwest::Error> {
 ///
 /// # Example
 /// ```no_run
-/// use ao3_api_rs::networking::{create_client, get_page};
+/// use unificial_api::ao3::networking::{create_client, get_page};
 /// let client = create_client("test").unwrap();
 /// let response = get_page("https://archiveofourown.org", &client);
 /// ```
@@ -130,7 +130,7 @@ pub fn get_page(url: &str, client: &Client) -> Result<reqwest::blocking::Respons
 ///
 /// # Example
 /// ```no_run
-/// use ao3_api_rs::networking::{create_client, get_init_page};
+/// use unificial_api::ao3::networking::{create_client, get_init_page};
 /// let client = create_client("test").unwrap();
 /// let html = get_init_page("https://archiveofourown.org/works".to_string(), &client);
 /// ```

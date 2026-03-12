@@ -1,5 +1,5 @@
 //! Blocking authentication implementation for AO3
-use crate::networking::get_page;
+use crate::ao3::networking::get_page;
 use log::debug;
 use reqwest::blocking::Client;
 use serde::Deserialize;
@@ -30,7 +30,7 @@ pub struct Token {
 ///
 /// # Example
 /// ```no_run
-/// use ao3_api_rs::networking::get_login_info;
+/// use unificial_api::ao3::networking::get_login_info;
 /// let info = get_login_info("log.txt");
 /// ```
 #[inline(always)]
@@ -53,7 +53,7 @@ pub fn get_login_info(path: &str) -> LoginInfo {
 ///
 /// # Example
 /// ```no_run
-/// use ao3_api_rs::networking::{create_client, get_token};
+/// use unificial_api::ao3::networking::{create_client, get_token};
 /// let client = create_client("test").unwrap();
 /// let token = get_token(&client);
 /// ```
@@ -76,7 +76,7 @@ pub fn get_token(client: &Client) -> String {
 ///
 /// # Example
 /// ```no_run
-/// use ao3_api_rs::networking::{create_client, login};
+/// use unificial_api::ao3::networking::{create_client, login};
 /// let client = create_client("test").unwrap();
 /// login(&client, "log.txt");
 /// ```

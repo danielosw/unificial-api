@@ -1,17 +1,13 @@
-//! # ficscrape-net
+//! # AO3 Networking
 //!
-//! A library for networking operations with Archive of Our Own (AO3).
+//! Networking operations for Archive of Our Own (AO3).
 //!
-//! This library provides utilities for:
-//! - HTTP client configuration with cookie support
-//! - Fetching and parsing HTML pages from AO3
-//! - AO3 authentication (login, token management)
-//! - HTML utilities (selectors, CSS injection)
+//! Provides HTTP client configuration, page fetching, and authentication.
 //!
 //! ## Usage - Blocking (default)
 //!
 //! ```no_run
-//! use ao3_api_rs::networking::{create_client, login, get_page};
+//! use unificial_api::ao3::networking::{create_client, login, get_page};
 //!
 //! // Create an HTTP client
 //! let client = create_client("test").expect("Failed to create client");
