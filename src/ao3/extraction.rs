@@ -8,9 +8,9 @@
 //! ## Usage
 //!
 //! ```rust,no_run
-//! use unificial_api::ao3::extraction::extract_fic_metadata;
+//! use unificial_api::ao3::extraction::extract_metadata;
 //! let html = "<li role=\"article\">...</li>";
-//! if let Ok(metadata) = extract_fic_metadata(html) {
+//! if let Ok(metadata) = extract_metadata(html) {
 //!     println!("Found fic: {}", metadata.name);
 //! }
 //! ```
@@ -19,7 +19,9 @@ use crate::utils::{make_selector, safe_static_regex, safe_static_selector};
 use crate::{
     define_regex, define_selector, make_static, select_raw_text, select_raw_text_next, select_text,
 };
-use ficdata::{FicMetadata, TagMap};
+use ficdata::TagMap;
+
+use crate::traits::Metadata;
 use regex::Regex;
 use scraper::{Html, selector::Selector};
 use std::collections::HashMap;
@@ -120,7 +122,7 @@ fn extract_series_list(document: &Html) -> Result<Vec<String>, UnificialError> {
 }
 
 /// Extract fic metadata from HTML
-pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, UnificialError> {
+pub fn extract_metadata(item: &str) -> Result<Metadata, UnificialError> {
     let document = Html::parse_document(item);
 
     let desc: String = document
@@ -277,7 +279,7 @@ pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, UnificialError> {
         .trim(),
     );
 
-    Ok(FicMetadata::new(id, name, url, last_updated)
+    Ok(Metadata::new(id, name, url, last_updated)
         .with_tags(tags)
         .with_description(desc)
         .with_authors(authors)

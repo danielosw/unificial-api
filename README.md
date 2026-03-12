@@ -50,13 +50,13 @@ pub trait Downloader {
 
 ### `Extractor`
 
-Parse HTML into structured `FicMetadata` and `TagMap` data (from the
+Parse HTML into structured `Metadata` and `TagMap` data (from the
 [`ficdata`](https://github.com/danielosw/ficdata) crate).
 
 ```rust
 pub trait Extractor {
     type Error: std::error::Error;
-    fn extract_metadata(&self, html: &str) -> Result<FicMetadata, Self::Error>;
+    fn extract_metadata(&self, html: &str) -> Result<Metadata, Self::Error>;
     fn extract_tags(&self, html: &str) -> Result<TagMap, Self::Error>;
 }
 ```
@@ -77,9 +77,9 @@ pub trait Authenticator {
 To support a new site, create a struct and implement the traits you need:
 
 ```rust
-use unificial_api::traits::{Downloader, Extractor};
+use unificial_api::traits::{Downloader, Extractor, Metadata};
 use unificial_api::errors::UnificialError;
-use ficdata::{FicMetadata, TagMap};
+use ficdata::TagMap;
 
 struct MySiteClient { /* fields */ }
 
@@ -91,7 +91,7 @@ impl Downloader for MySiteClient {
 
 impl Extractor for MySiteClient {
     type Error = UnificialError;
-    fn extract_metadata(&self, html: &str) -> Result<FicMetadata, Self::Error> { todo!() }
+    fn extract_metadata(&self, html: &str) -> Result<Metadata, Self::Error> { todo!() }
     fn extract_tags(&self, html: &str) -> Result<TagMap, Self::Error> { todo!() }
 }
 ```
@@ -101,7 +101,7 @@ impl Extractor for MySiteClient {
 The `ao3` module provides a full `Ao3Client` that implements all three traits.
 Lower-level functions are also available for direct use:
 
-- `unificial_api::ao3::extraction::extract_fic_metadata` — extract metadata
+- `unificial_api::ao3::extraction::extract_metadata` — extract metadata
   from an AO3 HTML fragment
 - `unificial_api::ao3::extraction::gettags` — extract tags from HTML
 - `unificial_api::ao3::networking::create_client` — create a configured HTTP
@@ -113,4 +113,4 @@ Lower-level functions are also available for direct use:
 ## Related Crates
 
 - [`ficdata`](https://github.com/danielosw/ficdata) — Core data structures
-  (`FicMetadata`, `TagMap`) and persistence utilities
+  (`Metadata`, `TagMap`) and persistence utilities

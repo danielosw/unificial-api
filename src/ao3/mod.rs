@@ -25,13 +25,13 @@
 //! The underlying functions are also available for direct use:
 //!
 //! ```rust,no_run
-//! use unificial_api::ao3::extraction::extract_fic_metadata;
+//! use unificial_api::ao3::extraction::extract_metadata;
 //! use unificial_api::ao3::networking::{create_client, get_page};
 //! ```
 
 use crate::errors::UnificialError;
-use crate::traits::{Authenticator, Downloader, Extractor};
-use ficdata::{FicMetadata, TagMap};
+use crate::traits::{Authenticator, Downloader, Extractor, Metadata};
+use ficdata::TagMap;
 
 pub mod extraction;
 pub mod networking;
@@ -87,8 +87,8 @@ impl Downloader for Ao3Client {
 impl Extractor for Ao3Client {
     type Error = UnificialError;
 
-    fn extract_metadata(&self, html: &str) -> Result<FicMetadata, Self::Error> {
-        extraction::extract_fic_metadata(html)
+    fn extract_metadata(&self, html: &str) -> Result<Metadata, Self::Error> {
+        extraction::extract_metadata(html)
     }
 
     fn extract_tags(&self, html: &str) -> Result<TagMap, Self::Error> {

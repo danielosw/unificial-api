@@ -15,7 +15,13 @@
 //! See the [`ao3`](crate::ao3) module for a complete implementation of all
 //! three traits targeting Archive of Our Own.
 
-use ficdata::{FicMetadata, TagMap};
+use ficdata::TagMap;
+
+/// Type alias for fanfiction metadata.
+///
+/// Re-exported from [`ficdata::FicMetadata`] under a shorter name for
+/// convenience across site implementations.
+pub type Metadata = ficdata::FicMetadata;
 
 /// A site downloader capable of fetching pages.
 ///
@@ -44,7 +50,7 @@ pub trait Downloader {
 /// An extractor that parses fanfiction metadata from HTML content.
 ///
 /// Implementors know how to parse a specific site's HTML structure and
-/// extract structured [`FicMetadata`] and [`TagMap`] data from it.
+/// extract structured [`Metadata`] and [`TagMap`] data from it.
 ///
 /// # Example
 ///
@@ -60,7 +66,7 @@ pub trait Extractor {
     type Error: std::error::Error;
 
     /// Extract metadata for a single fic from an HTML fragment.
-    fn extract_metadata(&self, html: &str) -> Result<FicMetadata, Self::Error>;
+    fn extract_metadata(&self, html: &str) -> Result<Metadata, Self::Error>;
 
     /// Extract tags from an HTML fragment.
     fn extract_tags(&self, html: &str) -> Result<TagMap, Self::Error>;

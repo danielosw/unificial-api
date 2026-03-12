@@ -31,7 +31,8 @@
 //! ```rust,no_run
 //! use unificial_api::traits::{Downloader, Extractor};
 //! use unificial_api::errors::UnificialError;
-//! use ficdata::{FicMetadata, TagMap};
+//! use ficdata::TagMap;
+//! use unificial_api::traits::Metadata;
 //!
 //! struct MySiteClient { /* ... */ }
 //!
@@ -43,7 +44,7 @@
 //!
 //! impl Extractor for MySiteClient {
 //!     type Error = UnificialError;
-//!     fn extract_metadata(&self, html: &str) -> Result<FicMetadata, Self::Error> { todo!() }
+//!     fn extract_metadata(&self, html: &str) -> Result<Metadata, Self::Error> { todo!() }
 //!     fn extract_tags(&self, html: &str) -> Result<TagMap, Self::Error> { todo!() }
 //! }
 //! ```
