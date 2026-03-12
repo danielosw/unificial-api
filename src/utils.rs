@@ -1,9 +1,8 @@
 //! Utility functions for HTML processing and shared helpers
 
-use crate::errors::Ao3ApiError;
+use crate::errors::UnificialError;
 use regex::Regex;
 use scraper::Selector;
-use std::sync::LazyLock;
 use std::sync::{Arc, Mutex};
 
 /// Creates a selector from provided string
@@ -65,20 +64,20 @@ macro_rules! select_text {
 pub(crate) fn safe_static_selector(
     selector: Option<Selector>,
     backup: &str,
-) -> Result<Selector, Ao3ApiError> {
+) -> Result<Selector, UnificialError> {
     selector.map(Ok).unwrap_or_else(|| {
         make_selector(backup)
-            .map_err(|_| Ao3ApiError::SelectorError("Failed to create CSS selector".to_string()))
+            .map_err(|_| UnificialError::SelectorError("Failed to create CSS selector".to_string()))
     })
 }
 
 pub(crate) fn safe_static_regex(
     regex: Option<regex::Regex>,
     backup: &str,
-) -> Result<Regex, Ao3ApiError> {
+) -> Result<Regex, UnificialError> {
     regex.map(Ok).unwrap_or_else(|| {
         Regex::new(backup)
-            .map_err(|_| Ao3ApiError::RegexError("Failed to compile regex".to_string()))
+            .map_err(|_| UnificialError::RegexError("Failed to compile regex".to_string()))
     })
 }
 

@@ -1,17 +1,17 @@
 [package]
-name = "ao3-api-rs"
-version = "0.1.0"
+name = "unificial-api"
+version = "0.2.0"
 edition = "2024"
 authors = ["Danielosw"]
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/danielosw/ao3-api-rs"
-description = " an unificial ao3 api written in rust "
+repository = "https://github.com/danielosw/unificial-api"
+description = "A trait-based fanfiction API framework with pluggable site downloaders"
 readme = "README.md"
-keywords = ["ao3", "fanfiction", "scraper", "extraction"]
+keywords = ["fanfiction", "scraper", "extraction", "ao3", "downloader"]
 categories = ["parser-implementations", "web-programming"]
 
 [dependencies]
-ficdata = { git = "ssh://git@github.com/danielosw/ficdata.git" }
+ficdata = { git = "https://github.com/danielosw/ficdata.git" }
 scraper = "0.*"
 regex = "1.*"
 thiserror = "2.0.18"

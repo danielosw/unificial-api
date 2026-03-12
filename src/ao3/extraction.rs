@@ -1,25 +1,27 @@
-//! # ficscrape
+//! # AO3 Extraction
 //!
 //! HTML extraction and scraping for AO3 fanfiction metadata.
 //!
-//! This crate provides functionality to extract metadata from AO3 HTML pages.
+//! This module provides functionality to extract metadata from AO3 HTML pages.
 //! It depends on `ficdata` for the core data structures.
 //!
 //! ## Usage
 //!
 //! ```rust,no_run
-//!	  use ao3_api_rs::extraction::extract_fic_metadata;
+//! use unificial_api::ao3::extraction::extract_metadata;
 //! let html = "<li role=\"article\">...</li>";
-//! if let Ok(metadata) = extract_fic_metadata(html) {
+//! if let Ok(metadata) = extract_metadata(html) {
 //!     println!("Found fic: {}", metadata.name);
 //! }
 //! ```
-use crate::errors::Ao3ApiError;
+use crate::errors::UnificialError;
 use crate::utils::{make_selector, safe_static_regex, safe_static_selector};
 use crate::{
     define_regex, define_selector, make_static, select_raw_text, select_raw_text_next, select_text,
 };
-use ficdata::{FicMetadata, TagMap};
+use ficdata::TagMap;
+
+use crate::traits::Metadata;
 use regex::Regex;
 use scraper::{Html, selector::Selector};
 use std::collections::HashMap;
@@ -77,7 +79,7 @@ define_selector!(HITS_SELECTOR, HITS_SELECTOR_TEXT, r#"dd.hits"#);
 ///
 /// # Returns
 /// * returns a HashMap mapping tag categories to vectors of tag values
-pub fn gettags(fic: String) -> Result<TagMap, Ao3ApiError> {
+pub fn gettags(fic: String) -> Result<TagMap, UnificialError> {
     let mut tags: HashMap<String, Vec<String>> = HashMap::new();
 
     safe_static_regex(TAG_REGEX.clone(), &TAG_REGEX_TEXT)?
@@ -98,7 +100,7 @@ fn parse_number_with_commas(text: &str) -> Result<u32, ParseIntError> {
 }
 
 /// Helper function to extract series list from HTML document
-fn extract_series_list(document: &Html) -> Result<Vec<String>, Ao3ApiError> {
+fn extract_series_list(document: &Html) -> Result<Vec<String>, UnificialError> {
     if SERIES_SELECTOR.is_none() {
         return Ok(Vec::new());
     }
@@ -120,7 +122,7 @@ fn extract_series_list(document: &Html) -> Result<Vec<String>, Ao3ApiError> {
 }
 
 /// Extract fic metadata from HTML
-pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, Ao3ApiError> {
+pub fn extract_metadata(item: &str) -> Result<Metadata, UnificialError> {
     let document = Html::parse_document(item);
 
     let desc: String = document
@@ -136,7 +138,7 @@ pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, Ao3ApiError> {
                     USER_STUFF_SELECTOR_BACKUP_TEXT,
                 )?)
                 .next()
-                .ok_or(Ao3ApiError::SelectorError(
+                .ok_or(UnificialError::SelectorError(
                     "Next failed to run when getting description".to_string(),
                 ))?,
         )
@@ -149,7 +151,7 @@ pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, Ao3ApiError> {
             HEADING_SELECTOR_TEXT,
         )?)
         .next()
-        .ok_or(Ao3ApiError::SelectorError(
+        .ok_or(UnificialError::SelectorError(
             "Next failed to run when getting heading".to_string(),
         ))?;
     let link = heading
@@ -158,11 +160,11 @@ pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, Ao3ApiError> {
             LINK_SELECTOR_TEXT,
         )?)
         .next()
-        .ok_or(Ao3ApiError::SelectorError(
+        .ok_or(UnificialError::SelectorError(
             "Next failed to run when getting link".to_string(),
         ))?;
     let url = "https://archiveofourown.org".to_owned()
-        + link.attr("href").ok_or(Ao3ApiError::SelectorError(
+        + link.attr("href").ok_or(UnificialError::SelectorError(
             "Failed to get href attribute from link".to_string(),
         ))?;
     let name = link.text().collect::<String>().trim().to_string();
@@ -170,11 +172,11 @@ pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, Ao3ApiError> {
     // Extract ID from URL using compiled regex
     let id = safe_static_regex(FIC_ID_REGEX.clone(), FIC_ID_REGEX_TEXT)?
         .captures(&url)
-        .ok_or(Ao3ApiError::RegexError(
+        .ok_or(UnificialError::RegexError(
             "Failed to capture id from url".to_string(),
         ))?
         .get(1)
-        .ok_or(Ao3ApiError::RegexError(
+        .ok_or(UnificialError::RegexError(
             "Failed to get id from url".to_string(),
         ))?
         .as_str()
@@ -244,7 +246,7 @@ pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, Ao3ApiError> {
             document,
             &safe_static_selector(KUDOS_SELECTOR.clone(), KUDOS_SELECTOR_TEXT)?
         )
-        .ok_or(Ao3ApiError::SelectorError(
+        .ok_or(UnificialError::SelectorError(
             "Failed to select kudos from dd.kudos".to_string(),
         ))?
         .trim(),
@@ -255,7 +257,7 @@ pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, Ao3ApiError> {
             document,
             &safe_static_selector(WORDS_SELECTOR.clone(), WORDS_SELECTOR_TEXT)?
         )
-        .ok_or(Ao3ApiError::SelectorError(
+        .ok_or(UnificialError::SelectorError(
             "Failed to extract words from dd.words".to_string(),
         ))?
         .trim(),
@@ -271,13 +273,13 @@ pub fn extract_fic_metadata(item: &str) -> Result<FicMetadata, Ao3ApiError> {
             document,
             &safe_static_selector(HITS_SELECTOR.clone(), HITS_SELECTOR_TEXT)?
         )
-        .ok_or(Ao3ApiError::SelectorError(
+        .ok_or(UnificialError::SelectorError(
             "Failed to select hits from dd.hits".to_string(),
         ))?
         .trim(),
     );
 
-    Ok(FicMetadata::new(id, name, url, last_updated)
+    Ok(Metadata::new(id, name, url, last_updated)
         .with_tags(tags)
         .with_description(desc)
         .with_authors(authors)

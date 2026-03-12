@@ -22,7 +22,7 @@ static PAGE_NUM_REGEX: LazyLock<Regex> =
 ///
 /// # Example
 /// ```no_run
-/// use ao3_api_rs::networking::create_client;
+/// use unificial_api::ao3::networking::create_client;
 /// let client = create_client("test").expect("Failed to create client");
 /// ```
 pub fn create_client(useragent: &str) -> Result<Client, reqwest::Error> {
@@ -45,7 +45,7 @@ pub fn create_client(useragent: &str) -> Result<Client, reqwest::Error> {
 ///
 /// # Example
 /// ```no_run
-/// use ao3_api_rs::networking::{create_client, get_page};
+/// use unificial_api::ao3::networking::{create_client, get_page};
 /// let client = create_client("test").unwrap();
 /// let response = get_page("https://archiveofourown.org", &client);
 /// ```
@@ -130,7 +130,7 @@ pub fn get_page(url: &str, client: &Client) -> Result<reqwest::blocking::Respons
 ///
 /// # Example
 /// ```no_run
-/// use ao3_api_rs::networking::{create_client, get_init_page};
+/// use unificial_api::ao3::networking::{create_client, get_init_page};
 /// let client = create_client("test").unwrap();
 /// let html = get_init_page("https://archiveofourown.org/works".to_string(), &client);
 /// ```
@@ -142,14 +142,14 @@ pub fn get_init_page(page: String, client: &Client) -> Html {
             .text()
             .expect("failed to get fic page text")),
     );
-    // Check if their is more then one page
+    // Check if there is more than one page
     let selector = make_selector(r#"ol[class="pagination actions"]"#)
         .expect("failed to make selector for pages");
     let mut nav = page1.select(&selector);
     // We just grab item one
     let atags = make_selector(r#"a"#).expect("failed to make selector for atags");
     let mut finalpage = page1.html();
-    // Handle if their is no nav bar
+    // Handle if there is no nav bar
     if nav.clone().count() != 0 {
         let page = nav.next().expect("failed to get navbar").select(&atags);
         let vec: Vec<String> = page
