@@ -113,4 +113,4 @@ Lower-level functions are also available for direct use:
 ## Related Crates
 
 - [`ficdata`](https://github.com/danielosw/ficdata) — Core data structures
-  (`Metadata`, `TagMap`) and persistence utilities
+  (`FicMetadata`, `TagMap`) and persistence utilities, re-exported here as `Metadata`
