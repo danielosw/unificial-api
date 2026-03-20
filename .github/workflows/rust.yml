@@ -1,4 +1,4 @@
-name: Test
+name: Rust
 
 on:
   pull_request:
@@ -13,13 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v6
+    
     - name: Install nightly toolchain
       run: rustup default nightly
-    - uses: actions/checkout@v6
+    
     - name: Rust Cache
       uses: Swatinem/rust-cache@v2
       with:
-        shared-key: "tests"
+        shared-key: "setup"
         cache-on-failure: true
+    
     - name: Run tests
-      run: cargo test
+      env:
+        CARGO_NET_GIT_FETCH_WITH_CLI: true # This is optional but allows the fetch to use the git binary
+      run: |
+        cargo test --all-features
