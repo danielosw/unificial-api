@@ -371,7 +371,7 @@ checksum = "37909eebbb50d72f9059c3b6d82c0463f2ff062c9e95845c43a6c9c0355411be"
 [[package]]
 name = "ficdata"
 version = "0.0.0"
-source = "git+ssh://git@github.com/danielosw/ficdata.git#38b5340a0092ee644bf39e394fb82b0cb378f9ad"
+source = "git+ssh://git@github.com/danielosw/ficdata.git#cdfd8ce56f216d2844022aeaa802dda1f12b928f"
 dependencies = [
  "bzip2",
  "parking_lot",
