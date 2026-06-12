@@ -452,7 +452,7 @@ checksum = "9f1f227452a390804cdb637b74a86990f2a7d7ba4b7d5693aac9b4dd6defd8d6"
 [[package]]
 name = "ficdata"
 version = "0.0.0"
-source = "git+ssh://git@github.com/danielosw/ficdata.git#7fd79e11f1cd86904b7345b3fe54397c3e0eebb4"
+source = "git+ssh://git@github.com/danielosw/ficdata.git#6a0a3b88affb8f9cabeae73d15691a7d3fb87ae2"
 dependencies = [
  "bzip2",
  "diesel",
