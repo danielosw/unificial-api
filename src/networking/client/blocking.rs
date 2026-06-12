@@ -114,7 +114,8 @@ pub fn get_page(url: &str, client: &Client) -> Result<reqwest::blocking::Respons
         }
         status => {
             // I don't want to be blindly doing things when I don't know what we are supposed to do so we just panic.
-            panic!("Unknown status: {}", status);
+            println!("Unknown status: {}", status);
+            Err(response.error_for_status().unwrap_err())
         }
     }
 }
